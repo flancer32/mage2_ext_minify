@@ -10,6 +10,9 @@
       "email": "alex@flancer64.com"
     }
   ],
+  "require": {
+    "matthiasmullie/minify": "^1.3"
+  },
   "autoload": {
     "files": [
       "src/registration.php"
