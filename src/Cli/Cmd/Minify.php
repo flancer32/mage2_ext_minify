@@ -4,6 +4,8 @@
  */
 namespace Flancer32\Minify\Cli\Cmd;
 
+use Symfony\Component\Console\Input\InputOption;
+
 /**
  * Minify JS/CSS files in './pub/static/' folder.
  */
@@ -14,7 +16,7 @@ class Minify
     const A_JS = '.js';
     const DESC = "Minify JS/CSS files in './pub/static/' folder.";
     const NAME = 'fl32:app:minify';
-
+    const OPT_REVERT = 'revert';
     /** @var  \Magento\Framework\App\Filesystem\DirectoryList */
     protected $dirList;
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -23,8 +25,7 @@ class Minify
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $manObj,
         \Magento\Framework\App\Filesystem\DirectoryList $dirList
-    )
-    {
+    ) {
         $this->manObj = $manObj;
         $this->dirList = $dirList;
         /* props initialization should be above parent constructor cause $this->configure() will be called inside */
@@ -40,6 +41,13 @@ class Minify
         /* UI related config (Symfony) */
         $this->setName(self::NAME);
         $this->setDescription(self::DESC);
+        $this->addOption(
+            self::OPT_REVERT,
+            'r',
+            InputOption::VALUE_OPTIONAL,
+            'Revert minified files.',
+            1
+        );
         /* Magento related config (Object Manager) */
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->manObj->get(\Magento\Framework\App\State::class);
@@ -60,8 +68,7 @@ class Minify
     protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
-    )
-    {
+    ) {
         $files = $this->getAllStaticFiles();
         $this->processJs($files[self::A_JS]);
         $this->processCss($files[self::A_CSS]);
@@ -92,8 +99,10 @@ class Minify
             if (!is_dir($path)) {
                 if (substr($path, -3) == self::A_JS) $js[] = $path;
                 if (substr($path, -4) == self::A_CSS) $css[] = $path;
-            } else if ($value != "." && $value != ".." && !is_link($path)) {
-                $this->getDirContents($path, $js, $css);
+            } else {
+                if ($value != "." && $value != ".." && !is_link($path)) {
+                    $this->getDirContents($path, $js, $css);
+                }
             }
         }
     }

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- ********************** -->
+    <!-- Console (CLI Commands) -->
+    <!-- ********************** -->
+    <type name="\Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="flancer32_minify" xsi:type="object">\Flancer32\Minify\Cli\Cmd\Minify</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
