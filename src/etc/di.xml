@@ -8,7 +8,8 @@
     <type name="\Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="flancer32_minify" xsi:type="object">\Flancer32\Minify\Cli\Cmd\Minify</item>
+                <item name="flancer32_minify_make" xsi:type="object">\Flancer32\Minify\Cli\Cmd\Make</item>
+                <item name="flancer32_minify_revert" xsi:type="object">\Flancer32\Minify\Cli\Cmd\Revert</item>
             </argument>
         </arguments>
     </type>

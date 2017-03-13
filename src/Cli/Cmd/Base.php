@@ -4,19 +4,16 @@
  */
 namespace Flancer32\Minify\Cli\Cmd;
 
-use Symfony\Component\Console\Input\InputOption;
-
 /**
- * Minify JS/CSS files in './pub/static/' folder.
+ * Base class for JS/CSS files minification.
  */
-class Minify
+class Base
     extends \Symfony\Component\Console\Command\Command
 {
     const A_CSS = '.css';
     const A_JS = '.js';
-    const DESC = "Minify JS/CSS files in './pub/static/' folder.";
-    const NAME = 'fl32:app:minify';
-    const OPT_REVERT = 'revert';
+    const EXT_BAK = '.not_minified';
+
     /** @var  \Magento\Framework\App\Filesystem\DirectoryList */
     protected $dirList;
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -38,16 +35,6 @@ class Minify
     protected function configure()
     {
         parent::configure();
-        /* UI related config (Symfony) */
-        $this->setName(self::NAME);
-        $this->setDescription(self::DESC);
-        $this->addOption(
-            self::OPT_REVERT,
-            'r',
-            InputOption::VALUE_OPTIONAL,
-            'Revert minified files.',
-            1
-        );
         /* Magento related config (Object Manager) */
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->manObj->get(\Magento\Framework\App\State::class);
@@ -65,16 +52,11 @@ class Minify
         }
     }
 
-    protected function execute(
-        \Symfony\Component\Console\Input\InputInterface $input,
-        \Symfony\Component\Console\Output\OutputInterface $output
-    ) {
-        $files = $this->getAllStaticFiles();
-        $this->processJs($files[self::A_JS]);
-        $this->processCss($files[self::A_CSS]);
-        $output->writeln('<info>Command is completed.<info>');
-    }
-
+    /**
+     * Get JS & CSS files from './pub/static/'.
+     *
+     * @return array [self::A_JS => [], self::A_CSS => []]
+     */
     protected function getAllStaticFiles()
     {
         $dir = $this->dirList->getPath('static');
@@ -107,19 +89,4 @@ class Minify
         }
     }
 
-    protected function processCss($files)
-    {
-        foreach ($files as $file) {
-            $minifier = new \MatthiasMullie\Minify\CSS($file);
-            $minifier->minify($file);
-        }
-    }
-
-    protected function processJs($files)
-    {
-        foreach ($files as $file) {
-            $minifier = new \MatthiasMullie\Minify\JS($file);
-            $minifier->minify($file);
-        }
-    }
 }
