@@ -4,38 +4,28 @@ Minify static JS/CSS in Magento 2
 
 ## Overview
 
-There are some troubles with JS/CSS minification in Magento 2.
+There are some troubles with JS/CSS minification in Magento 2 
+([one](http://magento.stackexchange.com/questions/134206/magento-2-how-to-work-with-minified-js-and-css-files),
+ [two](http://magento.stackexchange.com/questions/120405/how-to-minify-optimise-javascript-on-magento-2), 
+ [three](https://community.magento.com/t5/Hosting-Performance/CSS-and-js-minify-dont-work/td-p/1330), ...).
  
 This extension just minifies all JS and CSS files in `./pub/static/**` folder using 
 [matthiasmullie/minify](https://github.com/matthiasmullie/minify) module. All minified files stay on the places 
 of the original files. All original files are backed up with extension `*.not_minified`.
 
-
-
-### Before minification
-
-Google PageSpeed Insights:
-
-![](./docs/img/before.png)
-
-Firefox data:
-
-![](./docs/img/ff_before.png)
-
-
-### After minification
-
-Google PageSpeed Insights:
-
-![](./docs/img/after.png)
-
-Firefox data:
-
-![](./docs/img/ff_after.png)
+Sample Magento 2 application with default Luma theme has 60/100 points on Google PageSpeed Insights and
+2.4 MB size for it's home page before minification and 69/100 points and 1.5 MB after minification 
+([details](./docs/overview.md)).
 
 CAUTION: JS and CSS files in `./pub/static/**` folder are links to the files in `./vendor/**` folder, 
 these files will be minified in result. Use this module in case you can re-deploy original files.
 
+## Installation
+
+    $ composer require flancer32/mage2_ext_minify
+    $ ./bin/magento setup:upgrade
+    
+    
 
 ## Usage
 
@@ -66,8 +56,3 @@ To revert minification:
     Total 2266 JS and 225 CSS files are reverted.
     Don't forget reset permissions for the files.
 
-
-
-## Installation
-
-    $ composer require flancer32/mage2_ext_minify
