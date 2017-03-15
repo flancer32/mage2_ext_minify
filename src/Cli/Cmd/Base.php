@@ -16,40 +16,14 @@ class Base
 
     /** @var  \Magento\Framework\App\Filesystem\DirectoryList */
     protected $dirList;
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    protected $manObj;
 
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $manObj,
         \Magento\Framework\App\Filesystem\DirectoryList $dirList
-    ) {
-        $this->manObj = $manObj;
+    )
+    {
         $this->dirList = $dirList;
         /* props initialization should be above parent constructor cause $this->configure() will be called inside */
         parent::__construct();
-    }
-
-    /**
-     * Sets area code to start a adminhtml session and configure Object Manager.
-     */
-    protected function configure()
-    {
-        parent::configure();
-        /* Magento related config (Object Manager) */
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->manObj->get(\Magento\Framework\App\State::class);
-        try {
-            /* area code should be set only once */
-            $appState->getAreaCode();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            /* exception will be thrown if no area code is set */
-            $areaCode = \Magento\Framework\App\Area::AREA_FRONTEND;
-            $appState->setAreaCode($areaCode);
-            /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-            $configLoader = $this->manObj->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
-            $config = $configLoader->load($areaCode);
-            $this->manObj->configure($config);
-        }
     }
 
     /**
