@@ -53,8 +53,8 @@ class Make
             $minifier = null; // exception will be thrown for unknown types
             if ($type == self::A_JS) $minifier = new \MatthiasMullie\Minify\JS($bakFile);
             if ($type == self::A_CSS) $minifier = new \MatthiasMullie\Minify\CSS($bakFile);
+            $out->writeln("Minifing '$file' ...");
             $minifier->minify($file);
-            $out->writeln("File '$file' is minified.");
             $result++;
         }
         return $result;
